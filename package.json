@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/vzdai/discord-schedule-bot#readme",
   "dependencies": {
-    "discord.js": "^11.0.0"
+    "discord.js": "^11.0.0",
+    "dotenv": "^4.0.0"
   }
 }
