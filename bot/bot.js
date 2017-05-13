@@ -1,4 +1,5 @@
 const channelService = require('./services/channel.service');
+const messageHandler = require('./services/messageHandler.service');
 const Strings = require('../values/strings');
 
 const sprintf = require("sprintf-js").sprintf;
@@ -10,7 +11,7 @@ module.exports = (bot) => {
 
     bot.on('message', message => {
         if (message.author.id === process.env.CLIENT_ID) {
-            console.log('I sent a message');
+            console.log('Bot sent a message: ' + message.content);
             return;
         }
 
@@ -24,8 +25,7 @@ module.exports = (bot) => {
             // setchannel command
             if (message.content.includes(command)) {
                 const channelName = message.content.slice(
-                    message.content.indexOf(command) + command.length + 1
-                );
+                    message.content.indexOf(command) + command.length + 1);
                 channelService.setChannel(channelName, message);
             } else if (!channel) {
                 message.reply(Strings.SET_CHANNEL);
@@ -36,20 +36,10 @@ module.exports = (bot) => {
         }
 
         if (message.channel.name === channel) {
-            message.reply('This is the proper channel!');
+            // message.reply('This is the proper channel!');
+            messageHandler.handleMessage(message);
             return;
         }
-
-
-        //
-        // if (message.mentions.users.has(process.env.CLIENT_ID)) {
-        //     message.reply('I was mentioned!');
-        //     return;
-        // }
-        //
-        // if (message.content === 'ping') {
-        //     message.reply('pong');
-        // }
     });
 
     bot.login(process.env.BOT_TOKEN);
