@@ -1,16 +1,28 @@
 require('dotenv').config();
 
 const Discord = require('discord.js');
-const client = new Discord.Client();
 
-client.on('ready', () => {
-    console.log('I am ready!');
-});
+const bot = new Discord.Client();
 
-client.on('message', message => {
-    if (message.content === 'ping') {
-    message.reply('pong');
-}
-});
+require('./bot/bot.js')(bot);
 
-client.login(process.env.BOT_TOKEN);
+
+
+
+/*
+commands:
+    @bot join scheduler
+
+    start group
+    create event for group at TIME
+    get available members at TIME
+
+
+
+
+on user join server
+- would you like to join the scheduler?
+
+
+
+ */
