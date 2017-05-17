@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 
 require('./bot/bot.js')(bot);
+require('./database/connect');
 
 
 

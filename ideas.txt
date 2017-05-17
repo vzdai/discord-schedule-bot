@@ -1,0 +1,33 @@
+create group 'group name'
+> Who do you want to invite to the group?
+@a @b @c
+
+create event 'raid name'
+> What time do you want to set it for?
+tomorrow 5-7 pm
+> Who do you want to invite? Type their names, group name, or 'nobody'. You are invited by default.
+'group name'
+> Do you want to set a member limit for the event?
+yes
+> How many people can attend the event?
+8
+> Event 'raid name' has been created. It is set for time __ to ___
+
+list groups
+
+list events
+
+list events past
+list events future
+
+join event 'raid name' 
+join group
+
+leave event
+leave group
+
+remove event
+remove group
+
+edit event
+edit group
