@@ -6,7 +6,8 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : process.env.DB_USER,
-    password : process.env.DB_PASSWORD
+    password : process.env.DB_PASSWORD,
+    database: 'discord_bot',
 });
 
 connection.connect();
@@ -17,7 +18,7 @@ connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
     console.log('The solution is: ', rows[0].solution)
 });
 
-connection.end();
+module.exports = connection;
 
 
 /*
@@ -31,6 +32,7 @@ DB structure:
 Users
     user_id
     user_name
+    user_discriminator
 
 // server_users
 //     user_id

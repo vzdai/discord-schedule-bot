@@ -1,4 +1,5 @@
 const Strings = require('../../values/strings');
+const groupDB = require('../../database/services/group.service');
 
 const sprintf = require("sprintf-js").sprintf;
 
@@ -25,8 +26,8 @@ GroupService.prototype.createGroup = (message) => {
 const Replies = {};
 
 Replies.setName = (message) => {
-    group.name = message;
-    message.reply(Strings.GROUP_SET_NAME + message + '.\n' + Strings.GROUP_ASK_MEMBERS);
+    group.group_name = message.content;
+    message.reply(Strings.GROUP_SET_NAME + message.content + '.\n' + Strings.GROUP_ASK_MEMBERS);
     nextInput = 'setMembers';
 };
 
@@ -36,9 +37,9 @@ Replies.setMembers = (message) => {
     message.mentions.users.forEach((value, key) => {
         memberNames += `${value.username}, `;
         const user = {
-            id: value.id,
-            username: value.username,
-            discriminator: value.discriminator,
+            user_id: value.id,
+            user_name: value.username,
+            user_discriminator: value.discriminator,
         };
         users.push(user);
     });
@@ -52,18 +53,19 @@ Replies.setMembers = (message) => {
 Replies.setOpenStatus = (message) => {
     const status = message.content.toLowerCase() === 'yes';
 
-    group.open = status;
+    group.group_public = status;
     message.reply(Strings.GROUP_SET_OPEN + status + '.\n' + Strings.GROUP_ASK_CONFIRM);
     nextInput = 'groupCreated';
 };
 
 Replies.groupCreated = (message) => {
     const confirm = message.content.toLowerCase() === 'yes';
-    message.reply(sprintf(Strings.GROUP_CREATED, group.name));
+    message.reply(sprintf(Strings.GROUP_CREATED, group.group_name));
+    group.server_id = parseInt(message.guild.id);
 
-    // add to db
+    groupDB.addGroup(group);
 
-    clearPendingGroup()
+    clearPendingGroup();
 };
 
 
