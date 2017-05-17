@@ -7,12 +7,19 @@ const GroupService = function () {};
 
 let nextInput;
 
+/*
+    group = {
+        group_name,
+        group_public,
+        members, (user obj)
+        server_id,
+    }
+ */
 let group = {};
 
 GroupService.prototype.continue = (message) => {
     if (nextInput) {
         console.log('running next input');
-        // return GroupService.prototype[nextInput](message);
         Replies[nextInput](message);
     }
 };

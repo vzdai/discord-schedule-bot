@@ -1,6 +1,8 @@
 const groupService = require('./group.service');
 const eventService = require('./event.service');
 
+const Strings = require('../../values/strings');
+
 const MessageHandler = function() {};
 
 let conversationType;
@@ -32,9 +34,10 @@ function parseMessage(message) {
                 groupService.createGroup(message);
                 conversationType = 'group';
             } else if (words[1] === 'event') {
-
+                eventService.createEvent(message);
+                conversationType = 'event';
             } else {
-
+                handleInvalidCommand(message);
             }
             break;
         case 'join':
@@ -82,7 +85,17 @@ function parseMessage(message) {
 
             }
             break;
+        case 'help':
+            sendHelpMessage(message);
     }
+}
+
+function handleInvalidCommand(message) {
+    message.reply(Strings.INVALID_COMMAND);
+}
+
+function sendHelpMessage(message) {
+    message.reply(Strings.HELP);
 }
 
 module.exports = new MessageHandler();

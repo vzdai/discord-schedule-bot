@@ -29,16 +29,7 @@ GroupService.prototype.addGroup = (group) => {
 
         userDB.addUsers(group.members);
 
-        // const values = [];
-        // group.members.forEach((member) => {
-        //     const user = [member.user_id, member.user_name, member.user_discriminator];
-        //     values.push(user);
-        // })
-
-
     });
 };
 
 module.exports = new GroupService();
-
-// 'INSERT INTO groups (group_name, group_public, server_id) VALUES ?'
