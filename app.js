@@ -9,21 +9,5 @@ require('./database/connect');
 
 
 
-
-/*
-commands:
-    @bot join scheduler
-
-    start group
-    create event for group at TIME
-    get available members at TIME
-
-
-
-
-on user join server
-- would you like to join the scheduler?
-
-
-
- */
+// add bot to server:
+// https://discordapp.com/api/oauth2/authorize?client_id=295184483320070144&scope=bot&permissions=0
