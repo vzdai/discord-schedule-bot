@@ -22,6 +22,7 @@ EventService.prototype.continue = (message) => {
         console.log('running next input');
         Replies[nextInput](message);
     }
+    return nextInput ? true : false;
 };
 
 EventService.prototype.createEvent = (message) => {
@@ -97,6 +98,7 @@ Replies.eventCreated = (message) => {
 };
 
 function clearPendingEvent() {
+    nextInput = undefined;
     event = {};
 }
 

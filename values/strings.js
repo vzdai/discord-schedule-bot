@@ -20,6 +20,17 @@ module.exports = {
     GROUP_SET_OPEN: 'Set group open status to ',
 
     GROUP_CREATED: 'Group %s has been successfully created.',
+    GROUP_CANCELLED: 'Cancelled creation of the group.',
+
+    // list groups
+    GROUP_LIST: 'Here is a list of all groups on this server: ',
+
+    // join group
+    GROUP_CHOOSE_JOIN: 'What is the name of the group you want to join?',
+    GROUP_NOT_FOUND: 'Sorry, I could not find a group named %s.',
+    GROUP_NOT_OPEN: 'The group you specified is not open to self-invites.',
+    GROUP_JOINED: 'You have joined the group ',
+    GROUP_JOIN_ERROR: 'An error occurred when adding you to the group.',
 
 
     // create event

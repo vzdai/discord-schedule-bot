@@ -4,8 +4,8 @@ const userDB = require('./user.service');
 const GroupService = function () {};
 
 GroupService.prototype.addGroup = (group) => {
-    if (!group || !group.group_name || !group.members || !group.group_public || !group.server_id) {
-        console.log('Missing fields when adding group');
+    if (!group || !group.group_name || !group.members || !group.hasOwnProperty('group_public')|| !group.server_id) {
+        console.log('Missing fields when adding group', group);
         return;
     }
 
@@ -28,8 +28,49 @@ GroupService.prototype.addGroup = (group) => {
         console.log('Fields adding group', fields);
 
         userDB.addUsers(group.members);
-
+        userDB.addUsersToGroup(group.members, results.insertId);
     });
+};
+
+GroupService.prototype.getGroups = (serverID, callback) => {
+    if (!serverID) {
+        console.log('Missing serverID in getGroups');
+        return;
+    }
+
+    console.log('using serverID', serverID);
+
+    db.query('SELECT * FROM groups WHERE server_id = ?', [serverID], (error, results, fields) => {
+        if (error) {
+            console.error('Error getting groups', error);
+        }
+
+        console.log('Results getting groups', results);
+        console.log('Fields getting groups', fields);
+
+        callback(results);
+    });
+};
+
+GroupService.prototype.findGroupByName = (groupName, serverID, callback) => {
+    if (!groupName || !serverID) {
+        console.log('Missing group name or serverID when finding group');
+        return;
+    }
+
+    console.log('serverId', serverID);
+
+    db.query('SELECT * FROM groups WHERE group_name = ? AND server_id = ?', [groupName, serverID],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error getting groups', error);
+            }
+
+            console.log('Results getting groups', results);
+            console.log('Fields getting groups', fields);
+
+            callback(results);
+        });
 };
 
 module.exports = new GroupService();

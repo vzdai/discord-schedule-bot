@@ -8,11 +8,13 @@ const MessageHandler = function() {};
 let conversationType;
 
 MessageHandler.prototype.handleMessage = (message) => {
+    let continued = false;
     if (conversationType === 'group') {
-        groupService.continue(message);
+        continued = groupService.continue(message);
     } else if (conversationType === 'event') {
-        eventService.continue(message);
-    } else {
+        continued = eventService.continue(message, conversationType);
+    }
+    if (!continued) {
         parseMessage(message);
     }
 };
@@ -42,20 +44,21 @@ function parseMessage(message) {
             break;
         case 'join':
             if (words[1] === 'group') {
-
+                groupService.joinGroup(message);
+                conversationType = 'group';
             } else if (words[1] === 'event') {
 
             } else {
-
+                handleInvalidCommand(message);
             }
             break;
         case 'list':
             if (words[1] === 'groups') {
-
+                groupService.listGroups(message);
             } else if (words[1] === 'events') {
 
             } else {
-
+                handleInvalidCommand(message);
             }
             break;
         case 'edit':
@@ -64,7 +67,7 @@ function parseMessage(message) {
             } else if (words[1] === 'event') {
 
             } else {
-
+                handleInvalidCommand(message);
             }
             break;
         case 'leave':
@@ -73,7 +76,7 @@ function parseMessage(message) {
             } else if (words[1] === 'event') {
 
             } else {
-
+                handleInvalidCommand(message);
             }
             break;
         case 'delete':
@@ -82,11 +85,32 @@ function parseMessage(message) {
             } else if (words[1] === 'event') {
 
             } else {
+                handleInvalidCommand(message);
+            }
+            break;
+        case 'info':
+            if (words[1] === 'group') {
 
+            } else if (words[1] === 'event') {
+
+            } else {
+                handleInvalidCommand(message);
+            }
+            break;
+        case 'my':
+            if (words[1] === 'groups') {
+
+            } else if (words[1] === 'events') {
+
+            } else {
+                handleInvalidCommand(message);
             }
             break;
         case 'help':
             sendHelpMessage(message);
+            break;
+        default:
+            handleInvalidCommand(message);
     }
 }
 

@@ -36,7 +36,28 @@ UserService.prototype.addUsers = (users) => {
             console.log('Fields adding user', fields);
         }
     )
+};
 
+UserService.prototype.addUsersToGroup = (users, groupID) => {
+    const rows = [];
+
+    users.forEach((user) => {
+        const row = [groupID, user.user_id];
+        rows.push(row);
+    });
+
+    db.query('INSERT IGNORE INTO group_users (group_id, user_id) VALUES ?', [rows],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error adding group users', error);
+                return {};
+            }
+
+            console.log('Results adding group_user', results);
+            console.log('Fields adding group_user', fields);
+            return results;
+        }
+    )
 };
 
 
@@ -56,7 +77,7 @@ const testUsers = [
 
 ];
 
-UserService.prototype.addUsers(testUsers);
+// UserService.prototype.addUsers(testUsers);
 
 
 module.exports = new UserService();
