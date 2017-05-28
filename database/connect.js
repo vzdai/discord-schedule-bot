@@ -2,7 +2,7 @@
 // - open command prompt as administrator
 // - net start mysql57
 
-var mysql = require('mysql');
+var mysql = require('mysql2');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : process.env.DB_USER,
@@ -15,7 +15,8 @@ connection.connect();
 connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
     if (err) throw err;
 
-    console.log('The solution is: ', rows[0].solution)
+    if (rows[0].solution === 2)
+        console.log('Database connection successful.')
 });
 
 module.exports = connection;

@@ -9,6 +9,7 @@ let conversationType;
 
 MessageHandler.prototype.handleMessage = (message) => {
     let continued = false;
+    console.log('conversation type', conversationType);
     if (conversationType === 'group') {
         continued = groupService.continue(message);
     } else if (conversationType === 'event') {
@@ -24,6 +25,7 @@ MessageHandler.prototype.resetConversation = () => {
 };
 
 function parseMessage(message) {
+    console.log('parsing message', message.content);
     const str = message.content;
     const words = str.split(' ');
     const command = words[0];
@@ -99,7 +101,7 @@ function parseMessage(message) {
             break;
         case 'my':
             if (words[1] === 'groups') {
-
+                groupService.getUserGroups(message);
             } else if (words[1] === 'events') {
 
             } else {

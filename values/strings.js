@@ -24,6 +24,7 @@ module.exports = {
 
     // list groups
     GROUP_LIST: 'Here is a list of all groups on this server: ',
+    GROUP_LIST_JOINED: 'Here are the groups that you have joined: ',
 
     // join group
     GROUP_CHOOSE_JOIN: 'What is the name of the group you want to join?',

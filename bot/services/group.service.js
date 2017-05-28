@@ -1,6 +1,7 @@
 const Strings = require('../../values/strings');
 const groupDB = require('../../database/services/group.service');
 const userDB = require('../../database/services/user.service');
+const Utils = require('../../utils/utils');
 
 const sprintf = require("sprintf-js").sprintf;
 const _ = require('lodash');
@@ -23,8 +24,9 @@ GroupService.prototype.continue = (message, conversationType) => {
     if (nextInput) {
         console.log('running next input');
         Replies[nextInput](message);
+        return true;
     }
-    return nextInput ? true : false;
+    return false;
 };
 
 GroupService.prototype.createGroup = (message) => {
@@ -34,21 +36,31 @@ GroupService.prototype.createGroup = (message) => {
 
 GroupService.prototype.listGroups = (message) => {
     groupDB.getGroups(message.guild.id, (results) => {
-        let groupNames = '';
-
-        results.forEach((result) => {
-            groupNames += result.group_name;
-            groupNames += ', ';
-        });
-
-        groupNames = groupNames.substr(0, groupNames.length - 2);
-        message.reply(Strings.GROUP_LIST + groupNames + '.');
+        let names = results.map(result => result.group_name);
+        message.reply(Strings.GROUP_LIST + Utils.createStringList(names) + '.');
     });
 };
 
 GroupService.prototype.joinGroup = (message) => {
     message.reply(Strings.GROUP_CHOOSE_JOIN);
     nextInput = 'groupJoined';
+};
+
+GroupService.prototype.getUserGroups = (message) => {
+    console.log('getting user groups');
+
+    groupDB.findGroupsByUser(message.author.id).then((results) => {
+        const promises = [];
+        results.forEach((result) => {
+            promises.push(groupDB.getGroupInfo(result.group_id));
+        });
+
+        Promise.all(promises).then(groupInfo => {
+            console.log('promise results', groupInfo);
+            let names = groupInfo.map(group => group[0].group_name);
+            message.reply(Strings.GROUP_LIST_JOINED + Utils.createStringList(names) + '.');
+        });
+    });
 };
 
 // Replies for chain group messages
@@ -134,6 +146,7 @@ Replies.groupJoined = (message) => {
 };
 
 function resetConversation() {
+    console.log('conversation reset');
     nextInput = undefined;
     group = {};
 }

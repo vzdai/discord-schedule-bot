@@ -52,6 +52,27 @@ GroupService.prototype.getGroups = (serverID, callback) => {
     });
 };
 
+GroupService.prototype.findGroupsByUser = (userID) => {
+    return new Promise((resolve, reject) => {
+        if (!userID) {
+            console.log('Missing groupID in getGroups');
+            reject();
+        }
+
+        db.query('SELECT * FROM group_users WHERE user_id = ?', [userID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting groups', error);
+                reject(error);
+            }
+
+            console.log('Results getting groups', results);
+            console.log('Fields getting groups', fields);
+
+            resolve(results);
+        });
+    });
+};
+
 GroupService.prototype.findGroupByName = (groupName, serverID, callback) => {
     if (!groupName || !serverID) {
         console.log('Missing group name or serverID when finding group');
@@ -71,6 +92,27 @@ GroupService.prototype.findGroupByName = (groupName, serverID, callback) => {
 
             callback(results);
         });
+};
+
+GroupService.prototype.getGroupInfo = (groupID) => {
+    return new Promise((resolve, reject) => {
+        if (!groupID) {
+            console.log('Missing groupID when finding group');
+            reject();
+        }
+
+        db.query('SELECT * FROM groups WHERE group_id = ?', [groupID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting groups', error);
+                reject();
+            }
+
+            console.log('Results getting groups', results);
+            console.log('Fields getting groups', fields);
+
+            resolve(results);
+        });
+    });
 };
 
 module.exports = new GroupService();
