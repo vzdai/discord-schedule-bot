@@ -42,6 +42,12 @@ module.exports = {
     GROUP_GET_INFO: 'What is the name of the group you want to know about?',
     GROUP_INFO: 'The group \'%s\' is%s a public group. The following members are in this group: %s.',
 
+    // delete group
+    GROUP_CHOOSE_DELETE: 'What is the name of the group you want to delete?',
+    GROUP_DELETED: 'You have deleted the group ',
+    GROUP_DELETE_ERROR: 'An error occurred when deleting the group.',
+
+
     // create event
 
     EVENT_ASK_NAME: 'What is the name of the event?',

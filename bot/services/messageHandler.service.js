@@ -84,7 +84,8 @@ function parseMessage(message) {
             break;
         case 'delete':
             if (words[1] === 'group') {
-
+              groupService.deleteGroup(message);
+              conversationType = 'group';
             } else if (words[1] === 'event') {
 
             } else {

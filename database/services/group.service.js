@@ -136,4 +136,24 @@ GroupService.prototype.getUsersInGroup = (groupID) => {
     });
 };
 
+
+GroupService.prototype.deleteGroup = (groupID, callback) => {
+    if (!groupID) {
+        console.log('Missing groupID in deleteGroup');
+        return;
+    }
+
+    db.query('DELETE FROM groups WHERE group_id = ?', [groupID], (error, results, fields) => {
+        if (error) {
+            console.error('Error getting users', error);
+            callback();
+        }
+
+        console.log('Results getting users', results);
+        console.log('Fields getting users', fields);
+
+        callback(results);
+    });
+};
+
 module.exports = new GroupService();

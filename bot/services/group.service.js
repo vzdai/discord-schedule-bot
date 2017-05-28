@@ -56,6 +56,11 @@ GroupService.prototype.getGroupInfo = (message) => {
     nextInput = 'groupInfo';
 };
 
+GroupService.prototype.deleteGroup = (message) => {
+    message.reply(Strings.GROUP_CHOOSE_DELETE);
+    nextInput = 'groupDeleted';
+};
+
 GroupService.prototype.getUserGroups = (message) => {
     console.log('getting user groups');
 
@@ -169,6 +174,27 @@ Replies.groupLeft = (message) => {
                     message.reply(Strings.GROUP_LEAVE_ERROR);
                 } else {
                     message.reply(Strings.GROUP_LEFT + groupName + '.');
+                }
+                resetConversation();
+            });
+        }
+    });
+};
+
+Replies.groupDeleted = (message) => {
+    const groupName = message.content;
+    const serverID = message.guild.id;
+
+    groupDB.findGroupByName(groupName, serverID, (result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
+            resetConversation();
+        } else {
+            groupDB.deleteGroup(result[0].group_id, (deleted) => {
+                if (_.isEmpty(deleted)) {
+                    message.reply(Strings.GROUP_DELETE_ERROR);
+                } else {
+                    message.reply(Strings.GROUP_DELETED + groupName + '.');
                 }
                 resetConversation();
             });
