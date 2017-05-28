@@ -46,6 +46,16 @@ GroupService.prototype.joinGroup = (message) => {
     nextInput = 'groupJoined';
 };
 
+GroupService.prototype.leaveGroup = (message) => {
+    message.reply(Strings.GROUP_CHOOSE_LEAVE);
+    nextInput = 'groupLeft';
+};
+
+GroupService.prototype.getGroupInfo = (message) => {
+    message.reply(Strings.GROUP_GET_INFO);
+    nextInput = 'groupInfo';
+};
+
 GroupService.prototype.getUserGroups = (message) => {
     console.log('getting user groups');
 
@@ -137,9 +147,60 @@ Replies.groupJoined = (message) => {
                 if (_.isEmpty(result)) {
                     message.reply(Strings.GROUP_JOIN_ERROR);
                 } else {
-                    message.require(Strings.GROUP_JOINED);
+                    message.reply(Strings.GROUP_JOINED + groupName + '.');
                 }
                 resetConversation();
+            });
+        }
+    });
+};
+
+Replies.groupLeft = (message) => {
+    const groupName = message.content;
+    const serverID = message.guild.id;
+
+    groupDB.findGroupByName(groupName, serverID, (result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
+            resetConversation();
+        } else {
+            userDB.removeUserFromGroup(message.author.id, result[0].group_id, (result) => {
+                if (_.isEmpty(result)) {
+                    message.reply(Strings.GROUP_LEAVE_ERROR);
+                } else {
+                    message.reply(Strings.GROUP_LEFT + groupName + '.');
+                }
+                resetConversation();
+            });
+        }
+    });
+};
+
+Replies.groupInfo = (message) => {
+    const groupName = message.content;
+    const serverID = message.guild.id;
+
+    groupDB.findGroupByName(groupName, serverID, (result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
+            resetConversation();
+        } else {
+            groupDB.getUsersInGroup(result[0].group_id).then((results) => {
+                const promises = [];
+                console.log('results for getUsersInGroup', results);
+
+                results.forEach((result) => {
+                    promises.push(userDB.getUserInfo(result.user_id));
+                });
+
+                Promise.all(promises).then((users) =>  {
+                    const usernames = users.map(user => user[0].user_name);
+                    const names = Utils.createStringList(usernames);
+                    const isPublic = result[0].group_public ? '' : ' not';
+                    const members = names ? names : 'no members';
+                    message.reply(sprintf(Strings.GROUP_INFO, groupName, isPublic, members));
+                    resetConversation();
+                });
             });
         }
     });

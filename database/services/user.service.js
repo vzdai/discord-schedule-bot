@@ -11,6 +11,22 @@ const UserService = function () {};
         }
     ]
  */
+UserService.prototype.getUserInfo = (userID) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM users WHERE user_id = ?', [userID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting user info', error);
+                reject();
+            }
+
+            console.log('Results getting user info', results);
+            console.log('Fields getting user info', fields);
+            resolve(results);
+        })
+    });
+};
+
+
 UserService.prototype.addUsers = (users) => {
     if (!users) {
         console.log('Missing fields when adding users');
@@ -38,7 +54,7 @@ UserService.prototype.addUsers = (users) => {
     )
 };
 
-UserService.prototype.addUsersToGroup = (users, groupID) => {
+UserService.prototype.addUsersToGroup = (users, groupID, callback) => {
     const rows = [];
 
     users.forEach((user) => {
@@ -55,7 +71,29 @@ UserService.prototype.addUsersToGroup = (users, groupID) => {
 
             console.log('Results adding group_user', results);
             console.log('Fields adding group_user', fields);
-            return results;
+            callback(results);
+        }
+    )
+};
+
+UserService.prototype.removeUserFromGroup = (userID, groupID, callback) => {
+    // const rows = [];
+    //
+    // users.forEach((user) => {
+    //     const row = [groupID, user.user_id];
+    //     rows.push(row);
+    // });
+
+    db.query('DELETE FROM group_users WHERE group_id = ? AND user_id = ?', [groupID, userID],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error deleting group users', error);
+                return {};
+            }
+
+            console.log('Results deleting group_user', results);
+            console.log('Fields deleting group_user', fields);
+            callback(results);
         }
     )
 };

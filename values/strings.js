@@ -33,6 +33,14 @@ module.exports = {
     GROUP_JOINED: 'You have joined the group ',
     GROUP_JOIN_ERROR: 'An error occurred when adding you to the group.',
 
+    // leave group
+    GROUP_CHOOSE_LEAVE: 'What is the name of the group you want to leave?',
+    GROUP_LEFT: 'You have left the group ',
+    GROUP_LEAVE_ERROR: 'An error occurred when removing you from the group.',
+
+    // get group info
+    GROUP_GET_INFO: 'What is the name of the group you want to know about?',
+    GROUP_INFO: 'The group \'%s\' is%s a public group. The following members are in this group: %s.',
 
     // create event
 

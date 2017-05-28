@@ -74,7 +74,8 @@ function parseMessage(message) {
             break;
         case 'leave':
             if (words[1] === 'group') {
-
+              groupService.leaveGroup(message);
+              conversationType = 'group';
             } else if (words[1] === 'event') {
 
             } else {
@@ -92,7 +93,8 @@ function parseMessage(message) {
             break;
         case 'info':
             if (words[1] === 'group') {
-
+              groupService.getGroupInfo(message);
+              conversationType = 'group';
             } else if (words[1] === 'event') {
 
             } else {

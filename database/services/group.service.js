@@ -115,4 +115,25 @@ GroupService.prototype.getGroupInfo = (groupID) => {
     });
 };
 
+GroupService.prototype.getUsersInGroup = (groupID) => {
+    return new Promise((resolve, reject) => {
+        if (!groupID) {
+            console.log('Missing groupID in getUsersInGroup');
+            reject();
+        }
+
+        db.query('SELECT * FROM group_users WHERE group_id = ?', [groupID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting users', error);
+                reject(error);
+            }
+
+            console.log('Results getting users', results);
+            console.log('Fields getting users', fields);
+
+            resolve(results);
+        });
+    });
+};
+
 module.exports = new GroupService();
