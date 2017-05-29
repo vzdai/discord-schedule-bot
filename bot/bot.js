@@ -38,7 +38,6 @@ module.exports = (bot) => {
         if (message.channel.name === channel) {
             // message.reply('This is the proper channel!');
             messageHandler.handleMessage(message);
-            return;
         }
     });
 

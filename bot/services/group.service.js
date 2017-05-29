@@ -134,7 +134,7 @@ Replies.groupJoined = (message) => {
     const groupName = message.content;
     const serverID = message.guild.id;
 
-    groupDB.findGroupByName(groupName, serverID, (result) => {
+    groupDB.findGroupByName(groupName, serverID).then((result) => {
         if (_.isEmpty(result)) {
             message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
             resetConversation();
@@ -164,7 +164,7 @@ Replies.groupLeft = (message) => {
     const groupName = message.content;
     const serverID = message.guild.id;
 
-    groupDB.findGroupByName(groupName, serverID, (result) => {
+    groupDB.findGroupByName(groupName, serverID).then((result) => {
         if (_.isEmpty(result)) {
             message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
             resetConversation();
@@ -185,7 +185,7 @@ Replies.groupDeleted = (message) => {
     const groupName = message.content;
     const serverID = message.guild.id;
 
-    groupDB.findGroupByName(groupName, serverID, (result) => {
+    groupDB.findGroupByName(groupName, serverID).then((result) => {
         if (_.isEmpty(result)) {
             message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
             resetConversation();
@@ -206,7 +206,7 @@ Replies.groupInfo = (message) => {
     const groupName = message.content;
     const serverID = message.guild.id;
 
-    groupDB.findGroupByName(groupName, serverID, (result) => {
+    groupDB.findGroupByName(groupName, serverID).then((result) => {
         if (_.isEmpty(result)) {
             message.reply(sprintf(Strings.GROUP_NOT_FOUND, groupName));
             resetConversation();

@@ -71,7 +71,32 @@ UserService.prototype.addUsersToGroup = (users, groupID, callback) => {
 
             console.log('Results adding group_user', results);
             console.log('Fields adding group_user', fields);
-            callback(results);
+            if (callback) callback(results);
+        }
+    )
+};
+
+UserService.prototype.addUsersToEvent = (users, eventID, callback) => {
+    const rows = [];
+
+    users.forEach((user) => {
+        const row = [eventID, user];
+        rows.push(row);
+    });
+
+    console.log('adding users to event', rows);
+
+    db.query('INSERT IGNORE INTO event_users (event_id, user_id) VALUES ?', [rows],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error adding event users', error);
+                return {};
+            }
+
+            console.log('Results adding event_user', results);
+            console.log('Fields adding event_user', fields);
+
+            if (callback) callback(results);
         }
     )
 };
@@ -93,7 +118,7 @@ UserService.prototype.removeUserFromGroup = (userID, groupID, callback) => {
 
             console.log('Results deleting group_user', results);
             console.log('Fields deleting group_user', fields);
-            callback(results);
+            if (callback) callback(results);
         }
     )
 };

@@ -51,12 +51,12 @@ module.exports = {
     // create event
 
     EVENT_ASK_NAME: 'What is the name of the event?',
-    EVENT_ASK_START_TIME: 'When does the event start?',
-    EVENT_ASK_END_TIME: 'When does the event end?',
+    EVENT_ASK_START_TIME: 'When does the event start? (HH:MM [am/pm] MM/DD/YYYY) ',
+    EVENT_ASK_END_TIME: 'When does the event end? (HH:MM [am/pm] MM/DD/YYYY)',
     EVENT_ASK_GROUP: 'Do you want to invite groups to the event? (yes/no)',
     EVENT_ASK_GROUP2: 'Please enter the names of the groups you want to invite, separated by commas.',
     EVENT_ASK_MEMBERS: 'Which members do you want to invite to the event? Please @mention each person.',
-    EVENT_ASK_MEMBERS2: 'Do you want to invite other members to the event who aren\'t in the group? (yes/no)',
+    EVENT_ASK_MEMBERS2: 'Do you want to invite other members to the event? (yes/no)',
     EVENT_ASK_OPEN: 'Is the event open to self-invites? (yes/no)',
     EVENT_ASK_CONFIRM: 'Confirm creation of this event? (yes/no)',
 
@@ -64,7 +64,12 @@ module.exports = {
     EVENT_SET_START_TIME: 'Set event start time to ',
     EVENT_SET_END_TIME: 'Set event end time to ',
     EVENT_SET_MEMBERS: 'Members/groups invited to this event: ',
+    EVENT_ADDED_MEMBERS: 'Added members to this event: ',
     EVENT_SET_OPEN: 'Set event open status to ',
 
     EVENT_CREATED: 'Event %s has been successfully created.',
+
+    // list events
+    EVENT_LIST: 'Here is a list of all events on this server: ',
+    EVENT_LIST_JOINED: 'Here are the events that you have joined: ',
 };

@@ -58,20 +58,21 @@ function parseMessage(message) {
             if (words[1] === 'groups') {
                 groupService.listGroups(message);
             } else if (words[1] === 'events') {
-
+                eventService.listEvents(message);
+                conversationType = 'event';
             } else {
                 handleInvalidCommand(message);
             }
             break;
-        case 'edit':
-            if (words[1] === 'group') {
-
-            } else if (words[1] === 'event') {
-
-            } else {
-                handleInvalidCommand(message);
-            }
-            break;
+        // case 'edit':
+        //     if (words[1] === 'group') {
+        //
+        //     } else if (words[1] === 'event') {
+        //
+        //     } else {
+        //         handleInvalidCommand(message);
+        //     }
+        //     break;
         case 'leave':
             if (words[1] === 'group') {
               groupService.leaveGroup(message);

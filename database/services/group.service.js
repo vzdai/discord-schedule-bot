@@ -48,7 +48,7 @@ GroupService.prototype.getGroups = (serverID, callback) => {
         console.log('Results getting groups', results);
         console.log('Fields getting groups', fields);
 
-        callback(results);
+        if (callback) callback(results);
     });
 };
 
@@ -73,25 +73,28 @@ GroupService.prototype.findGroupsByUser = (userID) => {
     });
 };
 
-GroupService.prototype.findGroupByName = (groupName, serverID, callback) => {
-    if (!groupName || !serverID) {
-        console.log('Missing group name or serverID when finding group');
-        return;
-    }
+GroupService.prototype.findGroupByName = (groupName, serverID) => {
+    return new Promise((resolve, reject) => {
+        if (!groupName || !serverID) {
+            console.log('Missing group name or serverID when finding group');
+            reject();
+        }
 
-    console.log('serverId', serverID);
+        console.log('serverId', serverID);
 
-    db.query('SELECT * FROM groups WHERE group_name = ? AND server_id = ?', [groupName, serverID],
-        (error, results, fields) => {
-            if (error) {
-                console.error('Error getting groups', error);
-            }
+        db.query('SELECT * FROM groups WHERE group_name = ? AND server_id = ?', [groupName, serverID],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('Error getting groups', error);
+                    reject();
+                }
 
-            console.log('Results getting groups', results);
-            console.log('Fields getting groups', fields);
+                console.log('Results getting groups', results);
+                console.log('Fields getting groups', fields);
 
-            callback(results);
-        });
+                resolve(results);
+            });
+    })
 };
 
 GroupService.prototype.getGroupInfo = (groupID) => {
@@ -152,7 +155,7 @@ GroupService.prototype.deleteGroup = (groupID, callback) => {
         console.log('Results getting users', results);
         console.log('Fields getting users', fields);
 
-        callback(results);
+        if (callback) callback(results);
     });
 };
 
