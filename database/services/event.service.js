@@ -57,4 +57,71 @@ EventService.prototype.getEvents = (serverID, callback) => {
     });
 };
 
+EventService.prototype.findEventsByUser = (userID) => {
+    return new Promise((resolve, reject) => {
+        if (!userID) {
+            console.log('Missing groupID in findEventByUser');
+            reject();
+        }
+
+        db.query('SELECT * FROM event_users WHERE user_id = ?', [userID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting events', error);
+                reject(error);
+            }
+
+            console.log('Results getting events', results);
+            console.log('Fields getting events', fields);
+
+            resolve(results);
+        });
+    });
+};
+
+EventService.prototype.findEventByName = (eventName, serverID) => {
+    return new Promise((resolve, reject) => {
+        if (!eventName || !serverID) {
+            console.log('Missing event name or serverID when finding event');
+            reject();
+        }
+
+        console.log('serverId', serverID);
+
+        db.query('SELECT * FROM events WHERE event_name = ? AND server_id = ?', [eventName, serverID],
+            (error, results, fields) => {
+                if (error) {
+                    console.error('Error getting events', error);
+                    reject();
+                }
+
+                console.log('Results getting events', results);
+                console.log('Fields getting events', fields);
+
+                resolve(results);
+            });
+    });
+};
+
+EventService.prototype.getEventInfo = (eventID) => {
+    return new Promise((resolve, reject) => {
+        if (!eventID) {
+            console.log('Missing groupID when finding group');
+            reject();
+        }
+
+        db.query('SELECT * FROM events WHERE event_id = ?', [eventID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting events', error);
+                reject();
+            }
+
+            console.log('Results getting events', results);
+            console.log('Fields getting events', fields);
+
+            resolve(results);
+        });
+    });
+};
+
+
 module.exports = new EventService();

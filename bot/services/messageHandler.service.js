@@ -49,7 +49,8 @@ function parseMessage(message) {
                 groupService.joinGroup(message);
                 conversationType = 'group';
             } else if (words[1] === 'event') {
-
+                eventService.joinEvent(message);
+                conversationType = 'event';
             } else {
                 handleInvalidCommand(message);
             }
@@ -59,7 +60,6 @@ function parseMessage(message) {
                 groupService.listGroups(message);
             } else if (words[1] === 'events') {
                 eventService.listEvents(message);
-                conversationType = 'event';
             } else {
                 handleInvalidCommand(message);
             }
@@ -107,7 +107,7 @@ function parseMessage(message) {
             if (words[1] === 'groups') {
                 groupService.getUserGroups(message);
             } else if (words[1] === 'events') {
-
+                eventService.getUserEvents(message);
             } else {
                 handleInvalidCommand(message);
             }

@@ -2,6 +2,7 @@ const Strings = require('../../values/strings');
 const Utils = require('../../utils/utils');
 const groupDB = require('../../database/services/group.service');
 const eventDB = require('../../database/services/event.service');
+const userDB = require('../../database/services/user.service');
 const sprintf = require('sprintf-js').sprintf;
 
 const _ = require('lodash');
@@ -41,6 +42,28 @@ EventService.prototype.listEvents = (message) => {
     eventDB.getEvents(message.guild.id, (results) => {
         let names = results.map(result => result.event_name);
         message.reply(Strings.EVENT_LIST + Utils.createStringList(names) + '.');
+    });
+};
+
+EventService.prototype.joinEvent = (message) => {
+    message.reply(Strings.EVENT_CHOOSE_JOIN);
+    nextInput = 'eventJoined';
+};
+
+EventService.prototype.getUserEvents = (message) => {
+    console.log('getting user events');
+
+    eventDB.findEventsByUser(message.author.id).then((results) => {
+        const promises = [];
+        results.forEach((result) => {
+            promises.push(eventDB.getEventInfo(result.event_id));
+        });
+
+        Promise.all(promises).then(eventInfo => {
+            console.log('promise results', eventInfo);
+            let names = eventInfo.map(event => event[0].event_name);
+            message.reply(Strings.EVENT_LIST_JOINED + Utils.createStringList(names) + '.');
+        });
     });
 };
 
@@ -154,6 +177,32 @@ Replies.eventCreated = (message) => {
     eventDB.addEvent(event);
 
     resetConversation();
+};
+
+Replies.eventJoined = (message) => {
+    const eventName = message.content;
+    const serverID = message.guild.id;
+
+    eventDB.findEventByName(eventName, serverID).then((result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.EVENT_NOT_FOUND, eventName));
+            resetConversation();
+        } else if (!result[0].event_public) {
+            message.reply(Strings.EVENT_NOT_OPEN);
+            resetConversation();
+        } else {
+            const user = message.author.id;
+
+            userDB.addUsersToEvent([user], result[0].event_id, (result) => {
+                if (_.isEmpty(result)) {
+                    message.reply(Strings.EVENT_JOIN_ERROR);
+                } else {
+                    message.reply(Strings.EVENT_JOINED + eventName + '.');
+                }
+                resetConversation();
+            });
+        }
+    });
 };
 
 function resetConversation() {

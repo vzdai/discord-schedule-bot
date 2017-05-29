@@ -94,7 +94,7 @@ GroupService.prototype.findGroupByName = (groupName, serverID) => {
 
                 resolve(results);
             });
-    })
+    });
 };
 
 GroupService.prototype.getGroupInfo = (groupID) => {
