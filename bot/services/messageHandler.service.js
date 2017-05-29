@@ -75,30 +75,33 @@ function parseMessage(message) {
         //     break;
         case 'leave':
             if (words[1] === 'group') {
-              groupService.leaveGroup(message);
-              conversationType = 'group';
+                groupService.leaveGroup(message);
+                conversationType = 'group';
             } else if (words[1] === 'event') {
-
+                eventService.leaveEvent(message);
+                conversationType = 'event';
             } else {
                 handleInvalidCommand(message);
             }
             break;
         case 'delete':
             if (words[1] === 'group') {
-              groupService.deleteGroup(message);
-              conversationType = 'group';
+                groupService.deleteGroup(message);
+                conversationType = 'group';
             } else if (words[1] === 'event') {
-
+                eventService.deleteEvent(message);
+                conversationType = 'event';
             } else {
                 handleInvalidCommand(message);
             }
             break;
         case 'info':
             if (words[1] === 'group') {
-              groupService.getGroupInfo(message);
-              conversationType = 'group';
+                groupService.getGroupInfo(message);
+                conversationType = 'group';
             } else if (words[1] === 'event') {
-
+                eventService.getEventInfo(message);
+                conversationType = 'event';
             } else {
                 handleInvalidCommand(message);
             }

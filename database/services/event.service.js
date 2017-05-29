@@ -60,7 +60,7 @@ EventService.prototype.getEvents = (serverID, callback) => {
 EventService.prototype.findEventsByUser = (userID) => {
     return new Promise((resolve, reject) => {
         if (!userID) {
-            console.log('Missing groupID in findEventByUser');
+            console.log('Missing userID in findEventByUser');
             reject();
         }
 
@@ -105,7 +105,7 @@ EventService.prototype.findEventByName = (eventName, serverID) => {
 EventService.prototype.getEventInfo = (eventID) => {
     return new Promise((resolve, reject) => {
         if (!eventID) {
-            console.log('Missing groupID when finding group');
+            console.log('Missing eventID when finding group');
             reject();
         }
 
@@ -123,5 +123,44 @@ EventService.prototype.getEventInfo = (eventID) => {
     });
 };
 
+EventService.prototype.getUsersInEvent = (eventID) => {
+    return new Promise((resolve, reject) => {
+        if (!eventID) {
+            console.log('Missing eventID in getUsersInEvent');
+            reject();
+        }
+
+        db.query('SELECT * FROM event_users WHERE event_id = ?', [eventID], (error, results, fields) => {
+            if (error) {
+                console.error('Error getting users', error);
+                reject(error);
+            }
+
+            console.log('Results getting users', results);
+            console.log('Fields getting users', fields);
+
+            resolve(results);
+        });
+    });
+};
+
+EventService.prototype.deleteEvent = (eventID, callback) => {
+    if (!eventID) {
+        console.log('Missing eventID in deleteEvent');
+        return;
+    }
+
+    db.query('DELETE FROM events WHERE event_id = ?', [eventID], (error, results, fields) => {
+        if (error) {
+            console.error('Error deleting event', error);
+            callback();
+        }
+
+        console.log('Results deleting event', results);
+        console.log('Fields deleting event', fields);
+
+        if (callback) callback(results);
+    });
+};
 
 module.exports = new EventService();

@@ -123,6 +123,28 @@ UserService.prototype.removeUserFromGroup = (userID, groupID, callback) => {
     )
 };
 
+UserService.prototype.removeUserFromEvent = (userID, eventID, callback) => {
+    // const rows = [];
+    //
+    // users.forEach((user) => {
+    //     const row = [groupID, user.user_id];
+    //     rows.push(row);
+    // });
+
+    db.query('DELETE FROM event_users WHERE event_id = ? AND user_id = ?', [eventID, userID],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error deleting event users', error);
+                return {};
+            }
+
+            console.log('Results deleting event_user', results);
+            console.log('Fields deleting event_user', fields);
+            if (callback) callback(results);
+        }
+    )
+};
+
 
 
 const testUsers = [

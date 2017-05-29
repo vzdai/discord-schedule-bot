@@ -1,7 +1,7 @@
 module.exports = {
     // error handling
     INVALID_COMMAND: 'Sorry, I could not understand your command. Type \'help\' to see all available commands',
-    HELP: 'Help: list of commands goes here',
+    HELP: 'List of commands:\nCreate group/event\nDelete group/event\nJoin group/event\nLeave group/event\nList grousp/events\nInfo group/event\nMy groups/events\nHelp',
 
     // set channel
     SET_CHANNEL: 'Please set a channel for me to listen to with the command \'setchannel CHANNEL_NAME\'. It is recommended that you create a new channel just for talking to me, so that I don\'t accidentally respond to keywords in regular conversation.',
@@ -86,7 +86,7 @@ module.exports = {
 
     // get event info
     EVENT_GET_INFO: 'What is the name of the event you want to know about?',
-    EVENT_INFO: 'The group \'%s\' is%s a public event. The following members are in this group: %s.',
+    EVENT_INFO: 'The event \'%s\' is%s a public event. The following members are in this event: %s.',
 
     // delete event
     EVENT_CHOOSE_DELETE: 'What is the name of the event you want to delete?',

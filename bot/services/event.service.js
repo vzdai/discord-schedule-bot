@@ -50,6 +50,21 @@ EventService.prototype.joinEvent = (message) => {
     nextInput = 'eventJoined';
 };
 
+EventService.prototype.leaveEvent = (message) => {
+    message.reply(Strings.EVENT_CHOOSE_LEAVE);
+    nextInput = 'eventLeft';
+};
+
+EventService.prototype.getEventInfo = (message) => {
+    message.reply(Strings.EVENT_GET_INFO);
+    nextInput = 'eventInfo';
+};
+
+EventService.prototype.deleteEvent = (message) => {
+    message.reply(Strings.EVENT_CHOOSE_DELETE);
+    nextInput = 'eventDeleted';
+};
+
 EventService.prototype.getUserEvents = (message) => {
     console.log('getting user events');
 
@@ -200,6 +215,78 @@ Replies.eventJoined = (message) => {
                     message.reply(Strings.EVENT_JOINED + eventName + '.');
                 }
                 resetConversation();
+            });
+        }
+    });
+};
+
+Replies.eventLeft = (message) => {
+    const eventName = message.content;
+    const serverID = message.guild.id;
+
+    eventDB.findEventByName(eventName, serverID).then((result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.EVENT_NOT_FOUND, eventName));
+            resetConversation();
+        } else {
+            userDB.removeUserFromEvent(message.author.id, result[0].event_id, (result) => {
+                if (_.isEmpty(result)) {
+                    message.reply(Strings.EVENT_LEAVE_ERROR);
+                } else {
+                    message.reply(Strings.EVENT_LEFT + eventName + '.');
+                }
+                resetConversation();
+            });
+        }
+    });
+};
+
+Replies.eventDeleted = (message) => {
+    const eventName = message.content;
+    const serverID = message.guild.id;
+
+    eventDB.findEventByName(eventName, serverID).then((result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.EVENT_NOT_FOUND, eventName));
+            resetConversation();
+        } else {
+            eventDB.deleteEvent(result[0].event_id, (deleted) => {
+                if (_.isEmpty(deleted)) {
+                    message.reply(Strings.EVENT_DELETE_ERROR);
+                } else {
+                    message.reply(Strings.EVENT_DELETED + eventName + '.');
+                }
+                resetConversation();
+            });
+        }
+    });
+};
+
+Replies.eventInfo = (message) => {
+    const eventName = message.content;
+    const serverID = message.guild.id;
+
+    eventDB.findEventByName(eventName, serverID).then((result) => {
+        if (_.isEmpty(result)) {
+            message.reply(sprintf(Strings.EVENT_NOT_FOUND, eventName));
+            resetConversation();
+        } else {
+            eventDB.getUsersInEvent(result[0].event_id).then((results) => {
+                const promises = [];
+                console.log('results for getUsersInEvent', results);
+
+                results.forEach((result) => {
+                    promises.push(userDB.getUserInfo(result.user_id));
+                });
+
+                Promise.all(promises).then((users) =>  {
+                    const usernames = users.map(user => user[0].user_name);
+                    const names = Utils.createStringList(usernames);
+                    const isPublic = result[0].event_public ? '' : ' not';
+                    const members = names ? names : 'no members';
+                    message.reply(sprintf(Strings.EVENT_INFO, eventName, isPublic, members));
+                    resetConversation();
+                });
             });
         }
     });

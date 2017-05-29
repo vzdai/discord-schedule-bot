@@ -148,12 +148,12 @@ GroupService.prototype.deleteGroup = (groupID, callback) => {
 
     db.query('DELETE FROM groups WHERE group_id = ?', [groupID], (error, results, fields) => {
         if (error) {
-            console.error('Error getting users', error);
+            console.error('Error deleting group', error);
             callback();
         }
 
-        console.log('Results getting users', results);
-        console.log('Fields getting users', fields);
+        console.log('Results deleting group', results);
+        console.log('Fields deleting group', fields);
 
         if (callback) callback(results);
     });
